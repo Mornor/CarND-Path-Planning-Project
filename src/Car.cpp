@@ -7,5 +7,3 @@
 
 using namespace std; 
 
-void Car::init(float car_x, float car_y, float car_s, float car_d, float car_yaw, float car_speed) {
-}
