@@ -9,6 +9,8 @@
 #include "Eigen-3.3/Eigen/QR"
 #include "json.hpp"
 
+#include "Car.h"
+
 using namespace std;
 
 // for convenience
@@ -216,6 +218,9 @@ int main() {
 				// Previous path's end s and d values 
 				double end_path_s = j[1]["end_path_s"];
 				double end_path_d = j[1]["end_path_d"];
+
+				// Create a Car instance from given coordiantes
+				Car currentCar(car_x, car_y, car_s, car_d, car_yaw, car_speed);
 
 				// Sensor Fusion Data, a list of all other cars on the same side of the road.
 				auto sensor_fusion = j[1]["sensor_fusion"];
