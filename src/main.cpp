@@ -10,6 +10,7 @@
 #include "json.hpp"
 
 #include "Car.h"
+#include "PathPlanner.h"
 
 using namespace std;
 
@@ -158,6 +159,9 @@ int main() {
 	vector<double> map_waypoints_dx;
 	vector<double> map_waypoints_dy;
 
+	// Instantiate the PathPlanner 
+	PathPlanner pathPlanner = PathPlanner();
+	
 	// Waypoint map to read from
 	string map_file_ = "../data/highway_map.csv";
 	// The max s value before wrapping around the track back to 0
@@ -221,6 +225,8 @@ int main() {
 
 				// Sensor Fusion Data, a list of all other cars on the same side of the road.
 				auto sensor_fusion = j[1]["sensor_fusion"];
+
+				vector<Car> surroundingCars = pathPlanner.MaintainListSurroundingCars(sensor_fusion);
 
 				json msgJson;
 
