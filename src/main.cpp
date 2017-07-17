@@ -48,8 +48,7 @@ int ClosestWaypoint(double x, double y, vector<double> maps_x, vector<double> ma
 		double map_x = maps_x[i];
 		double map_y = maps_y[i];
 		double dist = distance(x,y,map_x,map_y);
-		if(dist < closestLen)
-		{
+		if(dist < closestLen){
 			closestLen = dist;
 			closestWaypoint = i;
 		}
@@ -228,6 +227,12 @@ int main() {
 
 
 				// TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
+				double dist_inc = 0.5;
+				for(int i = 0; i < 50; i++){
+					next_x_vals.push_back(car_x+(dist_inc*i)*cos(deg2rad(car_yaw)));
+					next_y_vals.push_back(car_y+(dist_inc*i)*sin(deg2rad(car_yaw)));
+				}
+
 				msgJson["next_x"] = next_x_vals;
 				msgJson["next_y"] = next_y_vals;
 
