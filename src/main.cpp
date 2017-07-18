@@ -160,7 +160,8 @@ int main() {
 	vector<double> map_waypoints_dy;
 
 	// Instantiate the PathPlanner 
-	PathPlanner pathPlanner = PathPlanner();
+	//PathPlanner pathPlanner = PathPlanner();
+	//PathPlanner pathPlanner; 
 	
 	// Waypoint map to read from
 	string map_file_ = "../data/highway_map.csv";
@@ -226,7 +227,17 @@ int main() {
 				// Sensor Fusion Data, a list of all other cars on the same side of the road.
 				auto sensor_fusion = j[1]["sensor_fusion"];
 
-				vector<Car> surroundingCars = pathPlanner.MaintainListSurroundingCars(sensor_fusion);
+				//vector<Car> surroundingCars = pathPlanner.MaintainListSurroundingCars(sensor_fusion);
+				int n_surroundingCars = sensor_fusion.size();  
+				vector<Car> surroundingCars;
+				if(n_surroundingCars > 0){
+					for(int i = 0; i < n_surroundingCars ; i++){
+						Car tempCar(sensor_fusion[i][0],sensor_fusion[i][1],sensor_fusion[i][2],
+										sensor_fusion[i][3],sensor_fusion[i][4],sensor_fusion[i][5],
+										sensor_fusion[i][6]);
+						surroundingCars.push_back(tempCar); 
+					}
+				}	
 
 				json msgJson;
 

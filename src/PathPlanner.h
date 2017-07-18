@@ -16,7 +16,7 @@ class PathPlanner {
 		~PathPlanner() {}
 
 		// Maintain a list of all the cars surrounding the one we drive, updated for each timesteps
-		vector<Car> MaintainListSurroundingCars(vector<double> sensorFusion);
+		vector<Car> MaintainListSurroundingCars(vector<float> sensorFusion);
 
 }; 
 
