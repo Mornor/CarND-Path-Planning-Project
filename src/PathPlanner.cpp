@@ -29,16 +29,13 @@ vector<Car> PathPlanner::MaintainListSurroundingCars(vector<vector<float>> senso
 }
 
 
-/*void followLane(double previous_path_x, double previous_path_y, double end_path_s, double end_path_d){
+void PathPlanner::FollowLane(int idLane, float speed, vector<float> &next_x_vals, vector<float> &next_y_vals){
 	// Follow a given lane at the give speed
 	// Check if car ahead, and if yes, change the lane.
 	// Return the next position (next_x_vals and next_y_vals of the car)
-	vector<double> next_x_vals;
-	vector<double> next_y_vals;
-
-	return {next_x_vals, next_y_vals}
+	std::cout << "[TODO]" << std::endl; 
 }
 
-void changeLane(){
+/*void changeLane(){
 	// Change lane in case a car is ahead of us and obstructing the way
 }*/

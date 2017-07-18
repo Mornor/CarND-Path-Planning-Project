@@ -226,6 +226,7 @@ int main() {
 				// Sensor Fusion Data, a list of all other cars on the same side of the road.
 				auto sensor_fusion = j[1]["sensor_fusion"];
 
+				// Maintain a vector of the state of the different cars surrouding the one we drive
 				vector<Car> surroundingCars = pathPlanner.MaintainListSurroundingCars(sensor_fusion);
 
 				json msgJson;
