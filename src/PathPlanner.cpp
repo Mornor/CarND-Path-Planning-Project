@@ -10,10 +10,10 @@
 using namespace std;
 
 // Init the PathPlanner
-/*PathPlanner::~PathPlanner() {}
+PathPlanner::~PathPlanner() {}
 
 // Maintain a list of all the cars surrounding the one we drive, updated for each timesteps
-vector<Car> PathPlanner::MaintainListSurroundingCars(vector<float> &sensorFusion){
+vector<Car> PathPlanner::MaintainListSurroundingCars(vector<vector<float>> sensorFusion){
 	int n_surroundingCars = sensorFusion.size();  
 	vector<Car> surroundingCars;
 	if(n_surroundingCars > 0){
@@ -29,7 +29,7 @@ vector<Car> PathPlanner::MaintainListSurroundingCars(vector<float> &sensorFusion
 }
 
 
-void followLane(double previous_path_x, double previous_path_y, double end_path_s, double end_path_d){
+/*void followLane(double previous_path_x, double previous_path_y, double end_path_s, double end_path_d){
 	// Follow a given lane at the give speed
 	// Check if car ahead, and if yes, change the lane.
 	// Return the next position (next_x_vals and next_y_vals of the car)

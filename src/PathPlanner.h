@@ -9,14 +9,11 @@ class PathPlanner {
 
 	public: 
 
-		// Constructor 
-		PathPlanner(); 
-
 		// Destructor
-		~PathPlanner() {}
+		virtual ~PathPlanner();
 
 		// Maintain a list of all the cars surrounding the one we drive, updated for each timesteps
-		vector<Car> MaintainListSurroundingCars(vector<float> sensorFusion);
+		vector<Car> MaintainListSurroundingCars(vector<vector<float>> sensorFusion);
 
 }; 
 
