@@ -38,15 +38,18 @@ void PathPlanner::FollowLane(int idLane, float speed, vector<float> &next_x_vals
 	// Return the next position (next_x_vals and next_y_vals of the car)
 
 	// Define the lane
-	Lane left_lane_waypoints = Lane(0);
-	Lane middle_lane_waypoints = Lane(1);  
-	Lane right_lane_waypoints = Lane(2); 
+	Lane left_lane = Lane(0);
+	Lane middle_lane = Lane(1);  
+	Lane right_lane = Lane(2); 
 
 	// Populate the lane using waypoints data
-	/*int nb_waypoints = map_wp_x.size(); 
+	int nb_waypoints = map_wp_x.size(); 
 	for(int i = 0; i < nb_waypoints; i++){
-		left_lane_waypoints.
-	}*/
+		// Pseudo code for middle lane
+		//middle_lane.x_pos = map_wp_x + (map_wp_dx * (2 + LANE_WIDTH));
+		//middle_lane.y_pos = map_wp_y + (map_wp_dy * (2 + LANE_WIDTH));
+		//middle_lane.s_pos = map_wp_s; 
+	}
 
 	std::cout << "[TODO]" << std::endl; 
 }
