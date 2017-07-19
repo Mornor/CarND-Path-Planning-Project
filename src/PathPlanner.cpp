@@ -22,8 +22,8 @@ vector<Car> PathPlanner::MaintainListSurroundingCars(vector<vector<float>> senso
 	if(n_surroundingCars > 0){
 		for(int i = 0; i < n_surroundingCars ; i++){
 			Car tempCar(sensorFusion[i][0],sensorFusion[i][1],sensorFusion[i][2],
-							sensorFusion[i][3],sensorFusion[i][4],sensorFusion[i][5],
-							sensorFusion[i][6]);
+						sensorFusion[i][3],sensorFusion[i][4],sensorFusion[i][5],
+						sensorFusion[i][6]);
 			surroundingCars.push_back(tempCar); 
 		}
 	}
@@ -38,14 +38,14 @@ void PathPlanner::FollowLane(int idLane, float speed, vector<float> &next_x_vals
 	// Return the next position (next_x_vals and next_y_vals of the car)
 
 	// Define the lane
-	Lane right_lane_waypoints = Lane(); 
-	Lane middle_lane_waypoints = Lane(); 
-	Lane left_lane_waypoints = Lane(); 
+	Lane left_lane_waypoints = Lane(0);
+	Lane middle_lane_waypoints = Lane(1);  
+	Lane right_lane_waypoints = Lane(2); 
 
 	// Populate the lane using waypoints data
 	/*int nb_waypoints = map_wp_x.size(); 
 	for(int i = 0; i < nb_waypoints; i++){
-		right_lane_waypoints.push_back()
+		left_lane_waypoints.
 	}*/
 
 	std::cout << "[TODO]" << std::endl; 
