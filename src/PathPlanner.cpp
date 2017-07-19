@@ -9,8 +9,11 @@
 
 using namespace std;
 
+#define LANE_WIDTH 4 // Each lane is 4 meters
+
 // Init the PathPlanner
 PathPlanner::~PathPlanner() {}
+Lane::~Lane() {}
 
 // Maintain a list of all the cars surrounding the one we drive, updated for each timesteps
 vector<Car> PathPlanner::MaintainListSurroundingCars(vector<vector<float>> sensorFusion){
@@ -29,10 +32,22 @@ vector<Car> PathPlanner::MaintainListSurroundingCars(vector<vector<float>> senso
 }
 
 
-void PathPlanner::FollowLane(int idLane, float speed, vector<float> &next_x_vals, vector<float> &next_y_vals){
+void PathPlanner::FollowLane(int idLane, float speed, vector<float> &next_x_vals, vector<float> &next_y_vals, vector<double> map_wp_x, vector<double> map_wp_y, vector<double> map_wp_s, vector<double> map_wp_dx, vector<double> map_wp_dy){
 	// Follow a given lane at the give speed
 	// Check if car ahead, and if yes, change the lane.
 	// Return the next position (next_x_vals and next_y_vals of the car)
+
+	// Define the lane
+	Lane right_lane_waypoints = Lane(); 
+	Lane middle_lane_waypoints = Lane(); 
+	Lane left_lane_waypoints = Lane(); 
+
+	// Populate the lane using waypoints data
+	/*int nb_waypoints = map_wp_x.size(); 
+	for(int i = 0; i < nb_waypoints; i++){
+		right_lane_waypoints.push_back()
+	}*/
+
 	std::cout << "[TODO]" << std::endl; 
 }
 
