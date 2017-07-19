@@ -46,9 +46,9 @@ void PathPlanner::FollowLane(int idLane, float speed, vector<float> &next_x_vals
 	int nb_waypoints = map_wp_x.size(); 
 	for(int i = 0; i < nb_waypoints; i++){
 		// Pseudo code for middle lane
-		//middle_lane.x_pos = map_wp_x + (map_wp_dx * (2 + LANE_WIDTH));
-		//middle_lane.y_pos = map_wp_y + (map_wp_dy * (2 + LANE_WIDTH));
-		//middle_lane.s_pos = map_wp_s; 
+		//middle_lane.x_wp = map_wp_x + (map_wp_dx * (2 + LANE_WIDTH)); // 2 because middle lane 
+		//middle_lane.y_wp = map_wp_y + (map_wp_dy * (2 + LANE_WIDTH));
+		//middle_lane.s_wp = map_wp_s; 
 	}
 
 	std::cout << "[TODO]" << std::endl; 
