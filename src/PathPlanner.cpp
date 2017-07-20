@@ -31,8 +31,12 @@ vector<Car> PathPlanner::MaintainListSurroundingCars(vector<vector<float>> senso
 	return surroundingCars;  
 }
 
+tk::spline PathPlanner::InterpolatePoints(vector<double> waypoints_s, vector<double> waypoints){
+	tk::spline result;
+	return result.set_points(waypoints_s, waypoints);
+}
 
-void PathPlanner::FollowLane(int idLane, float speed, vector<float> &next_x_vals, vector<float> &next_y_vals, vector<double> map_wp_x, vector<double> map_wp_y, vector<double> map_wp_s, vector<double> map_wp_dx, vector<double> map_wp_dy){
+void PathPlanner::FollowLane(vector<double> &next_x_vals, vector<double> &next_y_vals, vector<double> map_wp_x, vector<double> map_wp_y, vector<double> map_wp_s, vector<double> map_wp_dx, vector<double> map_wp_dy){
 	// Follow a given lane at the give speed
 	// Check if car ahead, and if yes, change the lane.
 	// Return the next position (next_x_vals and next_y_vals of the car)
@@ -44,13 +48,14 @@ void PathPlanner::FollowLane(int idLane, float speed, vector<float> &next_x_vals
 
 	// Populate the lane using waypoints data
 	int nb_waypoints = map_wp_x.size(); 
+
 	for(int i = 0; i < nb_waypoints; i++){
 		// wp_x and wp_y for left lane
 		left_lane.x_wp[i] = map_wp_x[i] + (map_wp_dx[i] * (1 + LANE_WIDTH));
 		left_lane.y_wp[i] = map_wp_y[i] + (map_wp_dy[i] * (1 + LANE_WIDTH));
 
 		// wp_x and wp_y for middle lane
-		middle_lane.x_wp[i] = map_wp_x[i] + (map_wp_dx[i] * (2 + LANE_WIDTH)); // 2 because middle lane 
+		middle_lane.x_wp[i] = map_wp_x[i] + (map_wp_dx[i] * (2 + LANE_WIDTH)); 
 		middle_lane.y_wp[i] = map_wp_y[i] + (map_wp_dy[i] * (2 + LANE_WIDTH));
 
 		// wp_x and wp_y for right lane
@@ -63,7 +68,15 @@ void PathPlanner::FollowLane(int idLane, float speed, vector<float> &next_x_vals
 		right_lane.s_wp[i] = map_wp_s[i];
 	}
 
-	std::cout << "[TODO]" << std::endl; 
+	// Construct next_x_vals and next_y_vals as to follow a defined lane
+	tk::spline s;
+	s.set_points(middle_lane.x_wp, middle_lane.y_wp);
+	double dist_inc = 0.5;
+	for(int i = 0; i < 50; i++){
+		next_x_vals.push_back(middle_lane.x_wp[i]+(dist_inc*i));
+		next_y_vals.push_back(middle_lane.y_wp[i]+(dist_inc*i));
+		//std::cout << next_x_vals[i] << std::endl; 
+	}
 }
 
 /*void changeLane(){
