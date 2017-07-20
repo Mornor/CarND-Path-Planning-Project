@@ -190,6 +190,18 @@ int main() {
 		map_waypoints_dy.push_back(d_y);
 	}
 
+	// Interpolate maps points with Bezier curve
+	tk::spline waypoints_x;
+	tk::spline waypoints_y;
+	tk::spline waypoints_dx;
+	tk::spline waypoints_dy;
+	// pathPlanner.InterpolatePoints(&waypoints_x, &waypoints_y, &waypoints_dx, &waypoints_dy, map_waypoints_s, map_waypoints_x, map_waypoints_y, map_waypoints_dx, map_waypoints_dy)
+	waypoints_x.set_points(map_waypoints_s, map_waypoints_x);
+	waypoints_y.set_points(map_waypoints_s, map_waypoints_y);
+	waypoints_dx.set_points(map_waypoints_s, map_waypoints_dx);
+	waypoints_dy.set_points(map_waypoints_s, map_waypoints_dy);
+
+
 	h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,&map_waypoints_dy,&pathPlanner](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
 	// "42" at the start of the message means there's a websocket message event.
 	// The 4 signifies a websocket message

@@ -20,7 +20,8 @@ class PathPlanner {
 		// Follow the given idLane at the given speed
 		void FollowLane(vector<double> &next_x_vals, vector<double> &next_y_vals, vector<double> map_wp_x, vector<double> map_wp_y, vector<double> map_wp_s, vector<double> map_wp_dx, vector<double> map_wp_dy); 
 
-		tk::spline InterpolatePoints(vector<double> waypoints_s, vector<double> waypoints);
+		// Fit a Bezier curve 
+		// void InterpolatePoints(vector<double> &waypoints_x, vector<double> &waypoints_y, vector<double> &waypoints_dx, vector<double> &waypoints_dy, vector<double> map_waypoints_s, vector<double> map_waypoints_x, vector<double> map_waypoints_y, vector<double> map_waypoints_dx, vector<double> map_waypoints_dy);
 
 }; 
 
