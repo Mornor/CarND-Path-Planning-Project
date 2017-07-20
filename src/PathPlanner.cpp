@@ -38,17 +38,29 @@ void PathPlanner::FollowLane(int idLane, float speed, vector<float> &next_x_vals
 	// Return the next position (next_x_vals and next_y_vals of the car)
 
 	// Define the lane
-	Lane left_lane = Lane(0);
-	Lane middle_lane = Lane(1);  
-	Lane right_lane = Lane(2); 
+	Lane right_lane = Lane(0);
+	Lane middle_lane = Lane(1);   
+	Lane left_lane = Lane(2);
 
 	// Populate the lane using waypoints data
 	int nb_waypoints = map_wp_x.size(); 
 	for(int i = 0; i < nb_waypoints; i++){
-		// Pseudo code for middle lane
-		//middle_lane.x_wp = map_wp_x + (map_wp_dx * (2 + LANE_WIDTH)); // 2 because middle lane 
-		//middle_lane.y_wp = map_wp_y + (map_wp_dy * (2 + LANE_WIDTH));
-		//middle_lane.s_wp = map_wp_s; 
+		// wp_x and wp_y for left lane
+		left_lane.x_wp[i] = map_wp_x[i] + (map_wp_dx[i] * (1 + LANE_WIDTH));
+		left_lane.y_wp[i] = map_wp_y[i] + (map_wp_dy[i] * (1 + LANE_WIDTH));
+
+		// wp_x and wp_y for middle lane
+		middle_lane.x_wp[i] = map_wp_x[i] + (map_wp_dx[i] * (2 + LANE_WIDTH)); // 2 because middle lane 
+		middle_lane.y_wp[i] = map_wp_y[i] + (map_wp_dy[i] * (2 + LANE_WIDTH));
+
+		// wp_x and wp_y for right lane
+		right_lane.x_wp[i] = map_wp_x[i] + (map_wp_dx[i] * (3 + LANE_WIDTH));
+		right_lane.y_wp[i] = map_wp_y[i] + (map_wp_dy[i] * (3 + LANE_WIDTH));
+
+		// wp_s for all lanes
+		left_lane.s_wp[i] = map_wp_s[i]; 
+		middle_lane.s_wp[i] = map_wp_s[i];
+		right_lane.s_wp[i] = map_wp_s[i];
 	}
 
 	std::cout << "[TODO]" << std::endl; 
