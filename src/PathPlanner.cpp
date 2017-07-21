@@ -32,6 +32,50 @@ vector<Car> PathPlanner::MaintainListSurroundingCars(vector<vector<float>> senso
 	return surroundingCars;  
 }
 
+void PathPlanner::FollowLane(vector<double> *next_x_vals, vector<double> *next_y_vals, vector<double> prev_path_x, vector<double> prev_path_y, tk::spline waypoints_x, tk::spline waypoints_y, tk::spline waypoints_dx, tk::spline waypoints_dy, double car_x, double car_y, double car_s, double car_yaw){
+	
+	int pathSize = prev_path_x.size(); 
+	double tmp_posx, tmp_posy, tmp_poss, tmp_angle; 
+	double path_x, path_y, path_dx, path_dy; 
+
+	// Copy old path into new path values
+	for(int i = 0; i < pathSize; i++){
+		next_x_vals->push_back(prev_path_x[i]);
+		next_y_vals->push_back(prev_path_y[i]); 
+	}
+
+	// If no path, initialize car position to current position. Otherwise, get data (x, y, angle) from the previous position of the car. 
+	if(pathSize == 0){
+		tmp_posx = car_x;
+		tmp_posy = car_y;
+        tmp_angle = car_yaw * M_PI / 180;
+        tmp_poss = car_s;
+	} else {
+		tmp_posx = prev_path_x[pathSize - 1];
+		tmp_posy = prev_path_y[pathSize - 1]; 
+		double tmp_posx_bf = prev_path_x[pathSize - 2];
+		double tmp_posy_bf = prev_path_y[pathSize - 2];
+		tmp_angle = atan2(tmp_posy - tmp_posy_bf, tmp_posx - tmp_posx_bf);
+	}
+
+	// Set up new path with speed at roughly 50mph
+	double dist_inc = 0.5;
+	for(int i = 0; i < 50 - pathSize; i++){
+		tmp_poss += dist_inc; // Augment s coordinates to make the car move along the road
+		path_x = waypoints_x(tmp_poss);
+		path_y = waypoints_y(tmp_poss);
+		path_dx = waypoints_dx(tmp_poss);
+		path_dy =  waypoints_dy(tmp_poss);
+
+		// 2 being the middle lane
+		tmp_posx = path_x + path_dx * (2 + 1 * LANE_WIDTH);
+ 		tmp_posy = path_y + path_dy * (2 + 1 * LANE_WIDTH);
+
+ 		next_x_vals->push_back(tmp_posx);
+ 		next_y_vals->push_back(tmp_posy);
+	}
+}
+
 /*void PathPlanner::InterpolatePoints(vector<double> &waypoints_x, vector<double> &waypoints_y, vector<double> &waypoints_dx, vector<double> &waypoints_dy, vector<double> map_waypoints_s, vector<double> map_waypoints_x, vector<double> map_waypoints_y, vector<double> map_waypoints_dx, vector<double> map_waypoints_dy){
 	&waypoints_x.set_points(map_waypoints_s, map_waypoints_x);
 	&waypoints_y.set_points(map_waypoints_s, map_waypoints_y);
@@ -39,7 +83,7 @@ vector<Car> PathPlanner::MaintainListSurroundingCars(vector<vector<float>> senso
 	&waypoints_dy.set_points(map_waypoints_s, map_waypoints_dy);
 }*/
 
-void PathPlanner::FollowLane(vector<double> &next_x_vals, vector<double> &next_y_vals, vector<double> map_wp_x, vector<double> map_wp_y, vector<double> map_wp_s, vector<double> map_wp_dx, vector<double> map_wp_dy){
+/*void PathPlanner::FollowLane(vector<double> &next_x_vals, vector<double> &next_y_vals, vector<double> map_wp_x, vector<double> map_wp_y, vector<double> map_wp_s, vector<double> map_wp_dx, vector<double> map_wp_dy){
 	// Follow a given lane at the give speed
 	// Check if car ahead, and if yes, change the lane.
 	// Return the next position (next_x_vals and next_y_vals of the car)
@@ -80,7 +124,7 @@ void PathPlanner::FollowLane(vector<double> &next_x_vals, vector<double> &next_y
 		next_y_vals.push_back(middle_lane.y_wp[i]+(dist_inc*i));
 		//std::cout << next_x_vals[i] << std::endl; 
 	}
-}
+}*/
 
 /*void changeLane(){
 	// Change lane in case a car is ahead of us and obstructing the way

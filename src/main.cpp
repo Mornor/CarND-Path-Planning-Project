@@ -202,7 +202,7 @@ int main() {
 	waypoints_dy.set_points(map_waypoints_s, map_waypoints_dy);
 
 
-	h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,&map_waypoints_dy,&pathPlanner](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
+	h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,&map_waypoints_dy,&pathPlanner,&waypoints_x,&waypoints_y,&waypoints_dx,&waypoints_dy](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
 	// "42" at the start of the message means there's a websocket message event.
 	// The 4 signifies a websocket message
 	// The 2 signifies a websocket event
@@ -253,7 +253,8 @@ int main() {
 					next_y_vals.push_back(car_y+(dist_inc*i)*sin(deg2rad(car_yaw)));
 				}*/
 
-				pathPlanner.FollowLane(next_x_vals, next_y_vals, map_waypoints_x, map_waypoints_y, map_waypoints_s, map_waypoints_dx, map_waypoints_dy);
+				//pathPlanner.FollowLane(next_x_vals, next_y_vals, map_waypoints_x, map_waypoints_y, map_waypoints_s, map_waypoints_dx, map_waypoints_dy);
+				pathPlanner.FollowLane(&next_x_vals, &next_y_vals, previous_path_x, previous_path_y, waypoints_x, waypoints_y, waypoints_dx, waypoints_dy, car_x, car_y, car_s, car_yaw); 
 
 				msgJson["next_x"] = next_x_vals;
 				msgJson["next_y"] = next_y_vals;
