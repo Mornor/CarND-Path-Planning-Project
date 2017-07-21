@@ -9,14 +9,14 @@ class Car {
 		int id;
 		float car_x;
 		float car_y;
+		float car_vx;
+		float car_vy;
 		float car_s;
 		float car_d;
-		float car_yaw;
-		float car_speed;
 		
 		// Default Constructor 
-		Car(int id, float car_x, float car_y, float car_s, float car_d, float car_yaw, float car_speed)
-			: id(id), car_x(car_x), car_y(car_y), car_s(car_s), car_d(car_d), car_yaw{car_yaw}, car_speed(car_speed) {}
+		Car(int id, float car_x, float car_y, float car_vx, float car_vy, float car_s, float car_d)
+			: id(id), car_x(car_x), car_y(car_y), car_vx(car_vx), car_vy(car_vy), car_s{car_s}, car_d(car_d) {}
 
 		// Destructor
 		~Car() {}
