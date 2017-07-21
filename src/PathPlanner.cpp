@@ -21,9 +21,10 @@ vector<Car> PathPlanner::MaintainListSurroundingCars(vector<vector<float>> senso
 	vector<Car> surroundingCars;
 	if(n_surroundingCars > 0){
 		for(int i = 0; i < n_surroundingCars ; i++){
+			float velocity = ((sensorFusion[i][3] * sensorFusion[i][3]) + (sensorFusion[i][4] * sensorFusion[i][4]));
 			Car tempCar(sensorFusion[i][0],sensorFusion[i][1],sensorFusion[i][2],
 						sensorFusion[i][3],sensorFusion[i][4],sensorFusion[i][5],
-						sensorFusion[i][6]);
+						sensorFusion[i][6], velocity);
 			surroundingCars.push_back(tempCar); 
 		}
 	}
