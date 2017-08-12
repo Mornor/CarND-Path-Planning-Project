@@ -102,7 +102,6 @@ vector<double> getFrenet(double x, double y, double theta, vector<double> maps_x
 	double frenet_d = distance(x_x,x_y,proj_x,proj_y);
 
 	//see if d value is positive or negative by comparing it to a center point
-
 	double center_x = 1000-maps_x[prev_wp];
 	double center_y = 2000-maps_y[prev_wp];
 	double centerToPos = distance(center_x,center_y,x_x,x_y);
@@ -201,6 +200,8 @@ int main() {
 	waypoints_dx.set_points(map_waypoints_s, map_waypoints_dx);
 	waypoints_dy.set_points(map_waypoints_s, map_waypoints_dy);
 
+	pathPlanner.Test(&waypoints_x);
+
 
 	h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,&map_waypoints_dx,&map_waypoints_dy,&pathPlanner,&waypoints_x,&waypoints_y,&waypoints_dx,&waypoints_dy](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
 	// "42" at the start of the message means there's a websocket message event.
@@ -254,7 +255,50 @@ int main() {
 				}*/
 
 				//pathPlanner.FollowLane(next_x_vals, next_y_vals, map_waypoints_x, map_waypoints_y, map_waypoints_s, map_waypoints_dx, map_waypoints_dy);
-				pathPlanner.FollowLane(&next_x_vals, &next_y_vals, previous_path_x, previous_path_y, waypoints_x, waypoints_y, waypoints_dx, waypoints_dy, car_x, car_y, car_s, car_yaw); 
+				//pathPlanner.FollowLane(&next_x_vals, &next_y_vals, previous_path_x, previous_path_y, waypoints_x, waypoints_y, waypoints_dx, waypoints_dy, car_x, car_y, car_s, car_yaw); 
+
+				/********/
+				int pathSize = previous_path_x.size(); 
+				double tmp_posx, tmp_posy, tmp_poss, tmp_angle; 
+				double path_x, path_y, path_dx, path_dy; 
+
+				// Copy old path into new path values
+				for(int i = 0; i < pathSize; i++){
+					next_x_vals.push_back(previous_path_x[i]);
+					next_y_vals.push_back(previous_path_y[i]); 
+				}
+
+				// If no path, initialize car position to current position. Otherwise, get data (x, y, angle) from the previous position of the car. 
+				if(pathSize == 0){
+					tmp_posx = car_x;
+					tmp_posy = car_y;
+					tmp_angle = car_yaw * M_PI / 180;
+					tmp_poss = car_s;
+				} else {
+					tmp_posx = previous_path_x[pathSize - 1];
+					tmp_posy = previous_path_y[pathSize - 1]; 
+					double tmp_posx_bf = previous_path_x[pathSize - 2];
+					double tmp_posy_bf = previous_path_y[pathSize - 2];
+					tmp_angle = atan2(tmp_posy - tmp_posy_bf, tmp_posx - tmp_posx_bf);
+				}
+
+				// Set up new path with speed at roughly 50mph
+				double dist_inc = 0.5;
+				for(int i = 0; i < 50 - pathSize; i++){
+					tmp_poss += dist_inc; // Increment s coordinates to make the car move along the road
+					path_x = waypoints_x(tmp_poss);
+					path_y = waypoints_y(tmp_poss);
+					path_dx = waypoints_dx(tmp_poss);
+					path_dy =  waypoints_dy(tmp_poss);
+
+					// 2 being the middle lane, 4 the lane width
+					tmp_posx = path_x + path_dx * (2 + 1 * 4);
+					tmp_posy = path_y + path_dy * (2 + 1 * 4);
+
+					next_x_vals.push_back(tmp_posx);
+					next_y_vals.push_back(tmp_posy);
+				}
+				/********/
 
 				msgJson["next_x"] = next_x_vals;
 				msgJson["next_y"] = next_y_vals;

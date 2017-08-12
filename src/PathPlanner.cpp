@@ -32,7 +32,7 @@ vector<Car> PathPlanner::MaintainListSurroundingCars(vector<vector<float>> senso
 	return surroundingCars;  
 }
 
-void PathPlanner::FollowLane(vector<double> *next_x_vals, vector<double> *next_y_vals, vector<double> prev_path_x, vector<double> prev_path_y, tk::spline waypoints_x, tk::spline waypoints_y, tk::spline waypoints_dx, tk::spline waypoints_dy, double car_x, double car_y, double car_s, double car_yaw){
+/*void PathPlanner::FollowLane(vector<double> *next_x_vals, vector<double> *next_y_vals, vector<double> prev_path_x, vector<double> prev_path_y, tk::spline waypoints_x, tk::spline waypoints_y, tk::spline waypoints_dx, tk::spline waypoints_dy, double car_x, double car_y, double car_s, double car_yaw){
 	
 	int pathSize = prev_path_x.size(); 
 	double tmp_posx, tmp_posy, tmp_poss, tmp_angle; 
@@ -48,8 +48,8 @@ void PathPlanner::FollowLane(vector<double> *next_x_vals, vector<double> *next_y
 	if(pathSize == 0){
 		tmp_posx = car_x;
 		tmp_posy = car_y;
-        tmp_angle = car_yaw * M_PI / 180;
-        tmp_poss = car_s;
+		tmp_angle = car_yaw * M_PI / 180;
+		tmp_poss = car_s;
 	} else {
 		tmp_posx = prev_path_x[pathSize - 1];
 		tmp_posy = prev_path_y[pathSize - 1]; 
@@ -69,12 +69,12 @@ void PathPlanner::FollowLane(vector<double> *next_x_vals, vector<double> *next_y
 
 		// 2 being the middle lane
 		tmp_posx = path_x + path_dx * (2 + 1 * LANE_WIDTH);
- 		tmp_posy = path_y + path_dy * (2 + 1 * LANE_WIDTH);
+		tmp_posy = path_y + path_dy * (2 + 1 * LANE_WIDTH);
 
- 		next_x_vals->push_back(tmp_posx);
- 		next_y_vals->push_back(tmp_posy);
+		next_x_vals->push_back(tmp_posx);
+		next_y_vals->push_back(tmp_posy);
 	}
-}
+}*/
 
 /*void PathPlanner::InterpolatePoints(vector<double> &waypoints_x, vector<double> &waypoints_y, vector<double> &waypoints_dx, vector<double> &waypoints_dy, vector<double> map_waypoints_s, vector<double> map_waypoints_x, vector<double> map_waypoints_y, vector<double> map_waypoints_dx, vector<double> map_waypoints_dy){
 	&waypoints_x.set_points(map_waypoints_s, map_waypoints_x);
