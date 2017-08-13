@@ -253,9 +253,15 @@ int main() {
 
 						// If the car is in front of us and the gap is less than 30 meters, adapt speed. 
 						if((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
-						 	ref_vel = 29.5; // mph
+						 	tooClose = true; 
 						 } 
 					}
+				}
+
+				if(tooClose){
+					ref_vel -= .224;
+				} else if(ref_vel < 49.5){
+					ref_vel += .224;
 				}
 
 				// 30m spaced waypoints. Will be interpolated with spline and fill with more waypoints.
