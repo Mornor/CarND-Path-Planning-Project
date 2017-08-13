@@ -148,15 +148,95 @@ vector<double> getXY(double s, double d, vector<double> maps_s, vector<double> m
 	return {x,y};
 }
 
-void changeLane(int *currentLane, int wantedLane){
-	// Check if we can change lane, to avoid going from left to right in one move
-	if(abs(*currentLane - wantedLane) == 1){
-		*currentLane = wantedLane; // Blindly turn left
+void changeLane(int *currentLane, bool canGoLeft, bool canGoRight){
+	if(*currentLane == 1){
+		if(canGoRight){
+			*currentLane = 2;	
+		} else if(canGoLeft){
+			*currentLane = 0; 
+		}
+	}
+	else if(*currentLane == 0){
+		if(canGoRight){
+			*currentLane = 1; 
+		}
+	}
+	else if(*currentLane == 2){
+		if(canGoLeft){
+			*currentLane = 1;
+		}
 	}
 }
 
-void checkWhereToGo(double car_s, vector<vector<double>> sensor_fusion, bool *canGoLeft, bool *canGoRight){
-	*canGoRight = true; 
+void checkIfLaneSafe(int lane, double d, int i, int prev_size, vector<vector<double>> sensor_fusion, double car_s, double car_d, bool *laneSafe){
+	if(d < (2 + 4 * lane + 2) && d > (2 + 4 * lane - 2)){ // +- 2 because car is in the middle of a lane of 4m width
+		double vx = sensor_fusion[i][3];
+		double vy = sensor_fusion[i][4]; 
+		double check_car_d = sensor_fusion[i][6]; 
+		double check_car_s = sensor_fusion[i][5]; // s value of the car
+		double check_speed = sqrt(vx * vx + vy * vy); 
+
+		// Project the s value using the previous path. 
+		check_car_s += ((double)prev_size * .02 * check_speed); 
+
+		// If the distance is safe enough, then we can cange to the left lane
+		if((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
+			//if((check_car_d - car_d) > 2){
+				std::cout << "Lane " << lane << " is safe" << std::endl;
+				*laneSafe = true; 
+			//}
+		} else {
+			std::cout << "Lane " << lane << " is unsafe" << std::endl;
+		}
+	}
+}
+
+void checkWhereToGo(int currentLane, double car_s, double car_d, int prev_size, vector<vector<double>> sensor_fusion, bool *canGoLeft, bool *canGoRight){
+	for(int i = 0; i < sensor_fusion.size(); i++){
+		float d = sensor_fusion[i][6]; // Get the d value of all the surroundings car and check their lane. 
+		bool laneSafe = false; 
+
+		switch(currentLane){
+			// Left lane, can go right, to lane 1. 
+			case 0:
+				checkIfLaneSafe(1, d, i, prev_size, sensor_fusion, car_s, car_d, &laneSafe);
+				if(laneSafe){
+					std::cout << "In left lane, can go right" << std::endl;
+					*canGoRight = true;
+					*canGoLeft = false;  
+				}
+				break; 
+			// Middle lane, can go right (lane 2) or left (lane 0)
+			case 1:
+				// First check if left lane is safe for changing and if it is, set canGoLfet to true
+				checkIfLaneSafe(0, d, i, prev_size, sensor_fusion, car_s, car_d, &laneSafe);
+				if(laneSafe){
+					std::cout << "In middle lane, can go left" << std::endl; 
+					*canGoLeft = true; 
+					*canGoRight = false; 
+				// Else, check the right lane
+				} else {
+					checkIfLaneSafe(2, d, i, prev_size, sensor_fusion, car_s, car_d, &laneSafe);
+					if(laneSafe){
+						std::cout << "In middle lane, can go right" << std::endl;
+						*canGoRight = true; 
+						*canGoLeft = false; 
+					}
+				}
+				break; 
+			// Right lane, can go left (lane 1)
+			case 2:
+				checkIfLaneSafe(1, d, i, prev_size, sensor_fusion, car_s, car_d, &laneSafe);
+				if(laneSafe){
+					std::cout << "In right lane, can go left" << std::endl; 
+					*canGoRight = false;
+					*canGoLeft = true; 
+				}
+				break;  
+			default: 
+				break; 
+		}
+	}
 }	
 
 int main() {
@@ -271,15 +351,10 @@ int main() {
 						// If the car is in front of us and the gap is less than 30 meters, adapt speed. 
 						if((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
 						 	tooClose = true; 
-						 	if(lane > 0){
-						 		// Update the boolean canGoLeft and canGoRight based on the position of other cars
-						 		checkWhereToGo(car_s, sensor_fusion, &canGoLeft, &canGoRight);
-						 		if(canGoLeft){
-						 			changeLane(&lane, 0);  
-						 		} else if(canGoRight) {
-						 			changeLane(&lane, 2); 
-						 		}
-						 	}
+							// Update the boolean canGoLeft and canGoRight based on the position of other cars
+						 	checkWhereToGo(lane, car_s, car_d, prev_size, sensor_fusion, &canGoLeft, &canGoRight);
+						 	changeLane(&lane, canGoLeft, canGoRight); 
+						 	std::cout << "Lane is now set to: " << lane << std::endl; 
 						 } 
 					}
 				}
