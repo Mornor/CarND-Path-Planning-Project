@@ -280,7 +280,7 @@ int main() {
 
 				ptsy.push_back(next_wp0[1]);
 				ptsy.push_back(next_wp1[1]); 
-				ptsy.push_back(next_wp2[2]);
+				ptsy.push_back(next_wp2[1]);
 				// So now, the ptsx and ptsy have 5 points : 2 previous points and the wpx, which are 30, 60 and 90m from the reference starting point
 
 				// Transformation (shift in rotation): Make sure the last point of the previous path is at the origin (0,0), and its angle is at 0 degres. 
