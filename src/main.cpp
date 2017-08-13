@@ -10,6 +10,7 @@
 #include "json.hpp"
 
 #include "spline.h"
+#include "PathPlanner.h"
 
 using namespace std;
 
@@ -147,6 +148,13 @@ vector<double> getXY(double s, double d, vector<double> maps_s, vector<double> m
 	return {x,y};
 }
 
+void changeLane(int *currentLane, int wantedLane){
+	// Check if we can change lane, to avoid going from left to right in one move
+	if(abs(*currentLane - wantedLane) == 1){
+		*currentLane = wantedLane; // Blindly turn left
+	}
+}
+
 int main() {
 	uWS::Hub h;
 
@@ -184,6 +192,9 @@ int main() {
 		map_waypoints_dx.push_back(d_x);
 		map_waypoints_dy.push_back(d_y);
 	}
+
+	// Create a PathPlanner instance
+	//PathPlanner pathPlanner = PathPlanner(); 
 
 	// Start in middle lane (0 being the left one, and 2 the right one) 
 	int lane = 1; 
@@ -255,7 +266,7 @@ int main() {
 						if((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
 						 	tooClose = true; 
 						 	if(lane > 0){
-						 		lane = 0; // Blindly turn left
+						 		changeLane(&lane, 0);  
 						 	}
 						 } 
 					}
@@ -371,18 +382,6 @@ int main() {
 					next_x_vals.push_back(x_point); 
 					next_y_vals.push_back(y_point); 
 				}
-
-				// TODO: define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
-				/***
-				double dist_inc = 0.5;
-				for(int i = 0; i < 50; i++){
-					double next_s = car_s + (i + 1) * dist_inc; 
-					double next_d = 6; // Stay in the middle line (4 meters width * 1.5 distance from the waypoints)
-					vector<double> xy = getXY(next_s, next_d, map_waypoints_s, map_waypoints_x, map_waypoints_y); 
-					next_x_vals.push_back(xy[0]);
-					next_y_vals.push_back(xy[1]);
-				}
-				***/
 
 				msgJson["next_x"] = next_x_vals;
 				msgJson["next_y"] = next_y_vals;
