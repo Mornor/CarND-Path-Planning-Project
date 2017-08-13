@@ -231,6 +231,33 @@ int main() {
 
 				json msgJson;
 
+				// Use the sensor fusion data to get the position of the surrounding cars. 
+				if(prev_size > 0){
+					car_s = end_path_s; 
+				}
+
+				bool tooClose = false; 
+
+				// Find the ref_v to use
+				for(int i = 0; i < sensor_fusion.size(); i++){
+					// If the car is in the same lane as ours
+					float d = sensor_fusion[i][6]; // Get the d value of all the surroundings car and check their lane. 
+					if(d < (2 + 4 * lane + 2) && d > (2 + 4 * lane - 2)){ // +- 2 because car is in the middle of a lane of 4m width
+						double vx = sensor_fusion[i][3];
+						double vy = sensor_fusion[i][4]; 
+						double check_car_s = sensor_fusion[i][5]; // s value of the car
+						double check_speed = sqrt(vx * vx + vy * vy); 
+
+						// Project the s value using the previous path. 
+						check_car_s += ((double)prev_size * .02 * check_speed); 
+
+						// If the car is in front of us and the gap is less than 30 meters, adapt speed. 
+						if((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
+						 	ref_vel = 29.5; // mph
+						 } 
+					}
+				}
+
 				// 30m spaced waypoints. Will be interpolated with spline and fill with more waypoints.
 				vector<double> ptsx;
 				vector<double> ptsy; 
