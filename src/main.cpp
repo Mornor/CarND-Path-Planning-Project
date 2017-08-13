@@ -155,6 +155,10 @@ void changeLane(int *currentLane, int wantedLane){
 	}
 }
 
+void checkWhereToGo(double car_s, vector<vector<double>> sensor_fusion, bool *canGoLeft, bool *canGoRight){
+	*canGoRight = true; 
+}	
+
 int main() {
 	uWS::Hub h;
 
@@ -248,6 +252,8 @@ int main() {
 				}
 
 				bool tooClose = false; 
+				bool canGoLeft = false;
+				bool canGoRight = false; 
 
 				// Find the ref_v to use
 				for(int i = 0; i < sensor_fusion.size(); i++){
@@ -266,7 +272,13 @@ int main() {
 						if((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
 						 	tooClose = true; 
 						 	if(lane > 0){
-						 		changeLane(&lane, 0);  
+						 		// Update the boolean canGoLeft and canGoRight based on the position of other cars
+						 		checkWhereToGo(car_s, sensor_fusion, &canGoLeft, &canGoRight);
+						 		if(canGoLeft){
+						 			changeLane(&lane, 0);  
+						 		} else if(canGoRight) {
+						 			changeLane(&lane, 2); 
+						 		}
 						 	}
 						 } 
 					}
