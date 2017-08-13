@@ -254,6 +254,9 @@ int main() {
 						// If the car is in front of us and the gap is less than 30 meters, adapt speed. 
 						if((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
 						 	tooClose = true; 
+						 	if(lane > 0){
+						 		lane = 0; // Blindly turn left
+						 	}
 						 } 
 					}
 				}
