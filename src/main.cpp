@@ -179,15 +179,15 @@ void checkIfLaneSafe(int lane, double d, int i, int prev_size, vector<vector<dou
 		// Project the s value using the previous path. 
 		check_car_s += ((double)prev_size * .02 * check_speed); 
 
+		std::cout << "Lane " << lane << " is safe" << std::endl;
+		*laneSafe = true; 
 		// If the distance is safe enough, then we can cange to the left lane
-		if((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
-			//if((check_car_d - car_d) > 2){
-				std::cout << "Lane " << lane << " is safe" << std::endl;
-				*laneSafe = true; 
-			//}
+		/*if((check_car_s > car_s) && ((check_car_s - car_s) < 30)){
+			std::cout << "Lane " << lane << " is safe" << std::endl;
+			*laneSafe = true; 
 		} else {
 			std::cout << "Lane " << lane << " is unsafe" << std::endl;
-		}
+		}*/
 	}
 }
 
@@ -201,7 +201,7 @@ void checkWhereToGo(int currentLane, double car_s, double car_d, int prev_size, 
 			case 0:
 				checkIfLaneSafe(1, d, i, prev_size, sensor_fusion, car_s, car_d, &laneSafe);
 				if(laneSafe){
-					std::cout << "In left lane, can go right" << std::endl;
+					//std::cout << "In left lane, can go right" << std::endl;
 					*canGoRight = true;
 					*canGoLeft = false;  
 				}
@@ -211,14 +211,14 @@ void checkWhereToGo(int currentLane, double car_s, double car_d, int prev_size, 
 				// First check if left lane is safe for changing and if it is, set canGoLfet to true
 				checkIfLaneSafe(0, d, i, prev_size, sensor_fusion, car_s, car_d, &laneSafe);
 				if(laneSafe){
-					std::cout << "In middle lane, can go left" << std::endl; 
+					//std::cout << "In middle lane, can go left" << std::endl; 
 					*canGoLeft = true; 
 					*canGoRight = false; 
 				// Else, check the right lane
 				} else {
 					checkIfLaneSafe(2, d, i, prev_size, sensor_fusion, car_s, car_d, &laneSafe);
 					if(laneSafe){
-						std::cout << "In middle lane, can go right" << std::endl;
+						//std::cout << "In middle lane, can go right" << std::endl;
 						*canGoRight = true; 
 						*canGoLeft = false; 
 					}
@@ -228,7 +228,7 @@ void checkWhereToGo(int currentLane, double car_s, double car_d, int prev_size, 
 			case 2:
 				checkIfLaneSafe(1, d, i, prev_size, sensor_fusion, car_s, car_d, &laneSafe);
 				if(laneSafe){
-					std::cout << "In right lane, can go left" << std::endl; 
+					//std::cout << "In right lane, can go left" << std::endl; 
 					*canGoRight = false;
 					*canGoLeft = true; 
 				}
