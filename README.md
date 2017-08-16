@@ -5,8 +5,18 @@
 ### Overview and constraints 
 In this project the goal was to safely navigate around a virtual highway with other traffic that is driving +-10 MPH of the 50 MPH speed limit. I have been provided with the car's localization and sensor fusion data, there is also a sparse map list of waypoints around the highway. The car should try to go as close as possible to the 50 MPH speed limit, which means passing slower traffic when possible, other cars can try to change lanes too. The car avoids hitting other cars at all cost as well as driving inside of the marked road lanes at all times, unless going from one lane to another. The car is able to make one complete loop around the 6946m highway. Also the car does not experience total acceleration over 10 m/s^2 and jerk that is greater than 50 m/s^3.
 
-### Result 
-The final result can be observed in the .gif below:
+### Reflection 
+#### Path generation
+It is important for the car to be able to safely drive on the road by choosing the safest line to drive on. <br>
+Depending on the position of the car, this one can only move to a certain lane. For example, it is impossible to moove from the left lane to the right lane in one move. 
+The basic idea and algorithm is the following: 
+- Check the car if the car in front of us (and on the same lane) is slower than ours ; 
+- If yes, then de-crement the speed and check for the possibility of changing lane ; 
+- If a change to the left is possible (so, if we are on the middle or righ lane), prioritize it (arbitrary decision) ; 
+- Check if the lane we want to go is safe to drive (i.e : is there no collision possible?)
+- If yes, change lane. 
+
+To check if the lane is safe to drive on, I predict the postion of our car and the other's one at t+1. 
 
 ### Data provided
 #### Main car's localization Data (No Noise)
